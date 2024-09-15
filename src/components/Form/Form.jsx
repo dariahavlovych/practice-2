@@ -2,13 +2,13 @@ import { FiSearch } from 'react-icons/fi';
 import style from './Form.module.css';
 
 export const Form = ({ onSubmit }) => {
-  function handleSubmit(e) {
-    e.preventDefault();
-    const form = e.target;
-    const value = form.elements.search.value;
-    onSubmit(value);
+  const handleSubmit = event => {
+    event.preventDefault();
+    const form = event.target;
+    const formValue = form.elements.search.value;
+    onSubmit(formValue);
     form.reset();
-  }
+  };
 
   return (
     <form className={style.form} onSubmit={handleSubmit}>

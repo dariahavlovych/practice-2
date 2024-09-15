@@ -1,42 +1,44 @@
-import { Text, Form, TodoList } from 'components';
-import { nanoid } from 'nanoid';
+import { Form, Text, TodoList } from 'components';
 import { useEffect, useState } from 'react';
+import { nanoid } from 'nanoid';
 
 export const Todos = () => {
+  const LS_KEY = 'todos';
   const [todos, setTodos] = useState(() => {
-    const saveTodos = JSON.parse(localStorage.getItem('todos'));
-    if (saveTodos) {
-      return saveTodos;
+    const savedTodos = window.localStorage.getItem(LS_KEY);
+
+    if (savedTodos !== null) {
+      return JSON.parse(savedTodos);
     }
     return [];
   });
 
-  const addTodo = value => {
+  useEffect(() => {
+    window.localStorage.setItem(LS_KEY, JSON.stringify(todos));
+  }, [todos]);
+
+  const addTodos = newTodo => {
     setTodos(prev => [
       ...prev,
       {
-        text: value,
+        text: newTodo,
         id: nanoid(),
       },
     ]);
   };
 
-  const handleDelete = id => {
-    setTodos(prev => prev.filter(item => item.id !== id));
+  const deleteTodo = itemId => {
+    setTodos(prev => prev.filter(item => item.id !== itemId));
   };
 
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
-
   return (
-    <div>
-      <Form onSubmit={addTodo} />
-      {todos.lenght !== 0 ? (
-        <TodoList todos={todos} handleDelete={handleDelete} />
+    <>
+      <Form onSubmit={addTodos}></Form>
+      {todos.length !== 0 ? (
+        <TodoList todos={todos} onDelete={deleteTodo} />
       ) : (
         <Text textAlign="center">There are no any todos ...</Text>
       )}
-    </div>
+    </>
   );
 };

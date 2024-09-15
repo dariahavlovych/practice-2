@@ -1,8 +1,12 @@
-import { GridItem, Text } from '..';
+import { EditForm, GridItem, Text } from 'components';
 import style from './TodoListItem.module.css';
-import { RiDeleteBinLine } from 'react-icons/ri';
+import { RiDeleteBinLine, RiEdit2Line } from 'react-icons/ri';
 
-export const TodoListItem = ({ text, counter, handleDelete, id }) => {
+export const TodoListItem = ({ text, counter, id, onDelete }) => {
+  const handleEdit = () => {
+    return <EditForm defaultValue={text} />;
+  };
+
   return (
     <GridItem>
       <div className={style.box}>
@@ -13,9 +17,12 @@ export const TodoListItem = ({ text, counter, handleDelete, id }) => {
         <button
           className={style.deleteButton}
           type="button"
-          onClick={() => handleDelete(id)}
+          onClick={() => onDelete(id)}
         >
           <RiDeleteBinLine size={24} />
+        </button>
+        <button className={style.editButton} type="button" onClick={handleEdit}>
+          <RiEdit2Line size={24} />
         </button>
       </div>
     </GridItem>
